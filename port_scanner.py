@@ -30,13 +30,15 @@ def get_open_ports(target, port_range, verbose=False):
   host_ip = checkTarget(target)
 
   result = ""
-  if len(host_ip) == 2:
-    # print hostname and ipaddress
-    result += "Open ports for " + host_ip[0] + " (" + host_ip[1] + ")"
-  else:
-    # print ipaddress
-    result += "Open ports for " + host_ip
-  result += f"\n{'PORT':<9}SERVICE\n"
+  ports = []
+  if verbose == True:
+    if len(host_ip) == 2:
+      # print hostname and ipaddress
+      result += "Open ports for " + host_ip[0] + " (" + host_ip[1] + ")"
+    else:
+      # print ipaddress
+      result += "Open ports for " + host_ip
+    result += f"\n{'PORT':<9}SERVICE\n"
 
   for port in range(port_range[0], port_range[1] + 1):
     if port not in ports_and_services:
@@ -54,7 +56,11 @@ def get_open_ports(target, port_range, verbose=False):
         result += f"{port:<9}{service}\n"
       else:
         # print port
-        result += f"{port:<9}\n"
+        # result += f"{port:<9}\n"
+        ports.append(port)
     sock.close()
 
-  return result.rstrip()
+  if verbose == True:
+    return result.rstrip()
+  else:
+    return ports
